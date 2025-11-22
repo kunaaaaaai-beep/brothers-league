@@ -242,89 +242,121 @@
       ・最終戦（第5試合）のみポイント2倍（6P）
     </p>
   </div>
-
   <script>
-    function recalc() {
-      const p1NameInput = document.getElementById('p1Name');
-      const p2NameInput = document.getElementById('p2Name');
-      const p1Name = (p1NameInput.value || '').trim() || 'プレイヤー1';
-      const p2Name = (p2NameInput.value || '').trim() || 'プレイヤー2';
-      document.getElementById('p1Label').innerHTML = '<strong>' + p1Name + '</strong>';
-      document.getElementById('p2Label').innerHTML = '<strong>' + p2Name + '</strong>';
+  const STORAGE_KEY = "brothersLeagueState_v1";
 
-      let p1 = 0;
-      let p2 = 0;
-      let p1Wins = 0;
-      let p2Wins = 0;
-      let cleanSheetBonus = 0;
+  function saveState() {
+    const p1Name = document.getElementById("p1Name").value || "";
+    const p2Name = document.getElementById("p2Name").value || "";
 
-      const rows = document.querySelectorAll('tbody tr');
-      rows.forEach(function(row, index) {
-        const winnerSel = row.querySelector('.winner');
-        const s1Input = row.querySelector('.scoreP1');
-        const s2Input = row.querySelector('.scoreP2');
-        if (!winnerSel || !s1Input || !s2Input) return;
-
-        const winner = winnerSel.value;
-        const s1 = parseInt(s1Input.value, 10);
-        const s2 = parseInt(s2Input.value, 10);
-
-        if (winner === 'p1') {
-          // 最終戦のみポイント2倍
-          p1 += (index === 4) ? 6 : 3;
-          p1Wins += 1;
-          // 完封ボーナス
-          if (!isNaN(s2) && s2 === 0) {
-            cleanSheetBonus += 100;
-          }
-        } else if (winner === 'p2') {
-          p2 += (index === 4) ? 6 : 3;
-          p2Wins += 1;
-          if (!isNaN(s1) && s1 === 0) {
-            cleanSheetBonus += 100;
-          }
-        }
+    const rows = [];
+    document.querySelectorAll("tbody tr").forEach((row) => {
+      rows.push({
+        gameTitle: row.querySelector(".gameTitle").value || "",
+        scoreP1: row.querySelector(".scoreP1").value || "",
+        scoreP2: row.querySelector(".scoreP2").value || "",
+        winner: row.querySelector(".winner").value || "",
+        note: row.querySelector(".note").value || "",
       });
-
-      document.getElementById('p1Points').textContent = p1;
-      document.getElementById('p2Points').textContent = p2;
-
-      const diff = Math.abs(p1 - p2);
-      document.getElementById('pointDiff').textContent = diff;
-
-      const baseAmount = diff * 200;
-      document.getElementById('baseAmount').textContent = baseAmount.toLocaleString();
-
-      // 全勝ボーナス
-      let sweepBonus = 0;
-      if (p1Wins === 5 || p2Wins === 5) {
-        sweepBonus = 500;
-      }
-
-      const bonusAmount = sweepBonus + cleanSheetBonus;
-      document.getElementById('bonusAmount').textContent = bonusAmount.toLocaleString();
-
-      const totalAmount = baseAmount + bonusAmount;
-      document.getElementById('totalAmount').textContent = totalAmount.toLocaleString();
-
-      let payerText = 'なし（同点）';
-      if (p1 > p2) {
-        payerText = p2Name + ' → ' + p1Name;
-      } else if (p2 > p1) {
-        payerText = p1Name + ' → ' + p2Name;
-      }
-      document.getElementById('payer').textContent = payerText;
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('select.winner, select.gameTitle, input.scoreP1, input.scoreP2, input.note').forEach(function(el) {
-        el.addEventListener('change', recalc);
-        el.addEventListener('input', recalc);
-      });
-      document.getElementById('p1Name').addEventListener('input', recalc);
-      document.getElementById('p2Name').addEventListener('input', recalc);
-      recalc();
     });
-  </script>
+
+    const state = { p1Name, p2Name, rows };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      // 保存できない場合は何もしない
+    }
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const state = JSON.parse(raw);
+
+      if (state.p1Name !== undefined)
+        document.getElementById("p1Name").value = state.p1Name;
+      if (state.p2Name !== undefined)
+        document.getElementById("p2Name").value = state.p2Name;
+
+      const rows = document.querySelectorAll("tbody tr");
+      (state.rows || []).forEach((r, i) => {
+        if (!rows[i]) return;
+        rows[i].querySelector(".gameTitle").value = r.gameTitle || "";
+        rows[i].querySelector(".scoreP1").value = r.scoreP1 || "";
+        rows[i].querySelector(".scoreP2").value = r.scoreP2 || "";
+        rows[i].querySelector(".winner").value = r.winner || "";
+        rows[i].querySelector(".note").value = r.note || "";
+      });
+    } catch (e) {
+      // 読み込み失敗は無視
+    }
+  }
+
+  function recalc() {
+    const p1Name = document.getElementById("p1Name").value || "プレイヤー1";
+    const p2Name = document.getElementById("p2Name").value || "プレイヤー2";
+    document.getElementById("p1Label").innerHTML = "<strong>" + p1Name + "</strong>";
+    document.getElementById("p2Label").innerHTML = "<strong>" + p2Name + "</strong>";
+
+    let p1 = 0, p2 = 0;
+    let p1Wins = 0, p2Wins = 0;
+    let cleanBonus = 0;
+
+    document.querySelectorAll("tbody tr").forEach((row, idx) => {
+      const w = row.querySelector(".winner").value;
+      const s1 = parseInt(row.querySelector(".scoreP1").value);
+      const s2 = parseInt(row.querySelector(".scoreP2").value);
+
+      if (w === "p1") {
+        p1 += (idx === 4) ? 6 : 3;  // 第5試合は2倍
+        p1Wins++;
+        if (s2 === 0) cleanBonus += 100;
+      }
+      if (w === "p2") {
+        p2 += (idx === 4) ? 6 : 3;
+        p2Wins++;
+        if (s1 === 0) cleanBonus += 100;
+      }
+    });
+
+    document.getElementById("p1Points").textContent = p1;
+    document.getElementById("p2Points").textContent = p2;
+
+    const diff = Math.abs(p1 - p2);
+    document.getElementById("pointDiff").textContent = diff;
+
+    const base = diff * 200;
+    document.getElementById("baseAmount").textContent = base.toLocaleString();
+
+    let sweep = (p1Wins === 5 || p2Wins === 5) ? 500 : 0;
+    const bonus = sweep + cleanBonus;
+    document.getElementById("bonusAmount").textContent = bonus.toLocaleString();
+
+    const total = base + bonus;
+    document.getElementById("totalAmount").textContent = total.toLocaleString();
+
+    let payer = "なし（同点）";
+    if (p1 > p2) payer = p2Name + " → " + p1Name;
+    if (p2 > p1) payer = p1Name + " → " + p2Name;
+    document.getElementById("payer").textContent = payer;
+
+    // 計算のたびに状態を保存
+    saveState();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // 入力イベントで再計算＋保存
+    document.querySelectorAll("input, select").forEach((el) => {
+      el.addEventListener("input", recalc);
+      el.addEventListener("change", recalc);
+    });
+
+    // まず保存された状態を復元
+    loadState();
+    // 復元結果で計算を反映
+    recalc();
+  });
+</script>
 </body>
 </html>
