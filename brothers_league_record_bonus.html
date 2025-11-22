@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>兄弟スポーツリーグ 記録表</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 16px;
+      background: #111;
+      color: #f5f5f5;
+    }
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    .desc {
+      font-size: 0.85rem;
+      color: #ccc;
+      margin-bottom: 16px;
+    }
+    .players {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .players label {
+      font-size: 0.9rem;
+    }
+    .players input {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #222;
+      color: #f5f5f5;
+      font-size: 0.9rem;
+      width: 130px;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 420px;
+      font-size: 0.8rem;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 6px 4px;
+      text-align: center;
+    }
+    th {
+      background: #1e1e1e;
+    }
+    tbody tr:nth-child(odd) {
+      background: #181818;
+    }
+    select, input[type="text"], input[type="number"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 4px 6px;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background: #222;
+      color: #f5f5f5;
+      font-size: 0.8rem;
+    }
+    .summary {
+      background: #181818;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .summary strong {
+      color: #4fd1ff;
+    }
+    .note {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <h1>兄弟スポーツリーグ 記録表（FC26 × プロスピ）</h1>
+  <p class="desc">1シリーズ5試合・勝利3ポイント（最終戦のみ6ポイント）。シリーズ終了時のポイント差 × 200円 ＋ ボーナスをPayPayで精算。</p>
+
+  <div class="players">
+    <label>プレイヤー1：
+      <input id="p1Name" type="text" placeholder="兄など">
+    </label>
+    <label>プレイヤー2：
+      <input id="p2Name" type="text" placeholder="弟など">
+    </label>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>試合</th>
+          <th>タイトル</th>
+          <th>P1得点</th>
+          <th>P2得点</th>
+          <th>勝者</th>
+          <th>メモ</th>
+        </tr>
+      </thead>
+      <tbody>
+
+    <tr>
+      <td>1</td>
+      <td>
+        <select class="gameTitle">
+          <option value="">-</option>
+          <option value="FC26">FC26</option>
+          <option value="プロスピ">プロスピ</option>
+        </select>
+      </td>
+      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+      <td>
+        <select class="winner">
+          <option value="">-</option>
+          <option value="p1">プレイヤー1</option>
+          <option value="p2">プレイヤー2</option>
+        </select>
+      </td>
+      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+    </tr>
+
+    <tr>
+      <td>2</td>
+      <td>
+        <select class="gameTitle">
+          <option value="">-</option>
+          <option value="FC26">FC26</option>
+          <option value="プロスピ">プロスピ</option>
+        </select>
+      </td>
+      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+      <td>
+        <select class="winner">
+          <option value="">-</option>
+          <option value="p1">プレイヤー1</option>
+          <option value="p2">プレイヤー2</option>
+        </select>
+      </td>
+      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+    </tr>
+
+    <tr>
+      <td>3</td>
+      <td>
+        <select class="gameTitle">
+          <option value="">-</option>
+          <option value="FC26">FC26</option>
+          <option value="プロスピ">プロスピ</option>
+        </select>
+      </td>
+      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+      <td>
+        <select class="winner">
+          <option value="">-</option>
+          <option value="p1">プレイヤー1</option>
+          <option value="p2">プレイヤー2</option>
+        </select>
+      </td>
+      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+    </tr>
+
+    <tr>
+      <td>4</td>
+      <td>
+        <select class="gameTitle">
+          <option value="">-</option>
+          <option value="FC26">FC26</option>
+          <option value="プロスピ">プロスピ</option>
+        </select>
+      </td>
+      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+      <td>
+        <select class="winner">
+          <option value="">-</option>
+          <option value="p1">プレイヤー1</option>
+          <option value="p2">プレイヤー2</option>
+        </select>
+      </td>
+      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+    </tr>
+
+    <tr>
+      <td>5</td>
+      <td>
+        <select class="gameTitle">
+          <option value="">-</option>
+          <option value="FC26">FC26</option>
+          <option value="プロスピ">プロスピ</option>
+        </select>
+      </td>
+      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+      <td>
+        <select class="winner">
+          <option value="">-</option>
+          <option value="p1">プレイヤー1</option>
+          <option value="p2">プレイヤー2</option>
+        </select>
+      </td>
+      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+    </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary">
+    <div>
+      <span id="p1Label"><strong>プレイヤー1</strong></span>：<span id="p1Points">0</span> P<br>
+      <span id="p2Label"><strong>プレイヤー2</strong></span>：<span id="p2Points">0</span> P
+    </div>
+    <div style="margin-top:6px;">
+      ポイント差：<strong><span id="pointDiff">0</span> P</strong><br>
+      基本金額（差 × 200円）：<strong><span id="baseAmount">0</span> 円</strong><br>
+      ボーナス金額（全勝＋完封）：<strong><span id="bonusAmount">0</span> 円</strong><br>
+      合計精算額：<strong><span id="totalAmount">0</span> 円</strong><br>
+      支払う人：<strong><span id="payer">なし（同点）</span></strong>
+    </div>
+    <p class="note">
+      ボーナスのルール：<br>
+      ・どちらかが5戦全勝 → ＋500円<br>
+      ・各試合で勝者側が相手を0点に抑えたら → 1試合ごとに＋100円<br>
+      ・最終戦（第5試合）のみポイント2倍（6P）
+    </p>
+  </div>
+
+  <script>
+    function recalc() {
+      const p1NameInput = document.getElementById('p1Name');
+      const p2NameInput = document.getElementById('p2Name');
+      const p1Name = (p1NameInput.value || '').trim() || 'プレイヤー1';
+      const p2Name = (p2NameInput.value || '').trim() || 'プレイヤー2';
+      document.getElementById('p1Label').innerHTML = '<strong>' + p1Name + '</strong>';
+      document.getElementById('p2Label').innerHTML = '<strong>' + p2Name + '</strong>';
+
+      let p1 = 0;
+      let p2 = 0;
+      let p1Wins = 0;
+      let p2Wins = 0;
+      let cleanSheetBonus = 0;
+
+      const rows = document.querySelectorAll('tbody tr');
+      rows.forEach(function(row, index) {
+        const winnerSel = row.querySelector('.winner');
+        const s1Input = row.querySelector('.scoreP1');
+        const s2Input = row.querySelector('.scoreP2');
+        if (!winnerSel || !s1Input || !s2Input) return;
+
+        const winner = winnerSel.value;
+        const s1 = parseInt(s1Input.value, 10);
+        const s2 = parseInt(s2Input.value, 10);
+
+        if (winner === 'p1') {
+          // 最終戦のみポイント2倍
+          p1 += (index === 4) ? 6 : 3;
+          p1Wins += 1;
+          // 完封ボーナス
+          if (!isNaN(s2) && s2 === 0) {
+            cleanSheetBonus += 100;
+          }
+        } else if (winner === 'p2') {
+          p2 += (index === 4) ? 6 : 3;
+          p2Wins += 1;
+          if (!isNaN(s1) && s1 === 0) {
+            cleanSheetBonus += 100;
+          }
+        }
+      });
+
+      document.getElementById('p1Points').textContent = p1;
+      document.getElementById('p2Points').textContent = p2;
+
+      const diff = Math.abs(p1 - p2);
+      document.getElementById('pointDiff').textContent = diff;
+
+      const baseAmount = diff * 200;
+      document.getElementById('baseAmount').textContent = baseAmount.toLocaleString();
+
+      // 全勝ボーナス
+      let sweepBonus = 0;
+      if (p1Wins === 5 || p2Wins === 5) {
+        sweepBonus = 500;
+      }
+
+      const bonusAmount = sweepBonus + cleanSheetBonus;
+      document.getElementById('bonusAmount').textContent = bonusAmount.toLocaleString();
+
+      const totalAmount = baseAmount + bonusAmount;
+      document.getElementById('totalAmount').textContent = totalAmount.toLocaleString();
+
+      let payerText = 'なし（同点）';
+      if (p1 > p2) {
+        payerText = p2Name + ' → ' + p1Name;
+      } else if (p2 > p1) {
+        payerText = p1Name + ' → ' + p2Name;
+      }
+      document.getElementById('payer').textContent = payerText;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('select.winner, select.gameTitle, input.scoreP1, input.scoreP2, input.note').forEach(function(el) {
+        el.addEventListener('change', recalc);
+        el.addEventListener('input', recalc);
+      });
+      document.getElementById('p1Name').addEventListener('input', recalc);
+      document.getElementById('p2Name').addEventListener('input', recalc);
+      recalc();
+    });
+  </script>
+</body>
+</html>
