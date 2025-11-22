@@ -1,633 +1,510 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>兄弟スポーツリーグ 記録表</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-    /* タイトル列を広くする */
-td:nth-child(2), th:nth-child(2) {
-  width: 95px;
+<meta charset="UTF-8">
+<title>兄弟スポーツリーグ 記録表（FC26 × プロスピ）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-/* 勝者列（5列目）も広くする */
-td:nth-child(5), th:nth-child(5) {
-  width: 90px;
-}
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: #111;
+    color: #f5f5f5;
+  }
 
-/* 得点欄は少しスリム化して全体バランス調整 */
-.scoreP1, .scoreP2 {
-  width: 60px;
-}
-    
-  <style>
-  td:nth-child(2), th:nth-child(2) {
-  width: 90px; /* ← タイトル列を広めに */
-}
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
 
-.scoreP1, .scoreP2 {
-  width: 60px; /* ← 得点欄を少しスリム化 */
-}
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      margin: 0;
-      padding: 16px;
-      background: #111;
-      color: #f5f5f5;
-    }
-    h1 {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-    }
-    .desc {
-      font-size: 0.85rem;
-      color: #ccc;
-      margin-bottom: 12px;
-    }
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 10px;
-      font-size: 0.8rem;
-    }
-    .meta label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .meta input {
-      padding: 4px 6px;
-      border-radius: 4px;
-      border: 1px solid #444;
-      background: #222;
-      color: #f5f5f5;
-      font-size: 0.8rem;
-    }
-    .players {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-      font-size: 0.85rem;
-    }
-    .players label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .players input {
-      padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #222;
-      color: #f5f5f5;
-      font-size: 0.9rem;
-      width: 130px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 420px;
-      font-size: 0.8rem;
-      margin-bottom: 10px;
-    }
-    th, td {
-      border: 1px solid #333;
-      padding: 6px 4px;
-      text-align: center;
-    }
-    th {
-      background: #1e1e1e;
-    }
-    tbody tr:nth-child(odd) {
-      background: #181818;
-    }
-    select, input[type="text"], input[type="number"] {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 4px 6px;
-      border-radius: 4px;
-      border: 1px solid #444;
-      background: #222;
-      color: #f5f5f5;
-      font-size: 0.8rem;
-    }
-    .summary {
-      background: #181818;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-    .summary strong {
-      color: #4fd1ff;
-    }
-    .summary-buttons {
-      margin-top: 8px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: 1px solid #555;
-      background: #222;
-      color: #f5f5f5;
-      font-size: 0.8rem;
-    }
-    .stats {
-      background: #181818;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-    .stats-title {
-      font-weight: bold;
-      margin-bottom: 4px;
-      color: #4fd1ff;
-    }
-    .history {
-      background: #181818;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-    .history-title {
-      font-weight: bold;
-      margin-bottom: 4px;
-      color: #4fd1ff;
-    }
-    .history-list {
-      margin-top: 4px;
-    }
-    .history-item {
-      border-top: 1px solid #333;
-      padding: 6px 0;
-    }
-    .history-item:first-child {
-      border-top: none;
-    }
-    .history-meta {
-      color: #ccc;
-      font-size: 0.75rem;
-    }
-  </style>
+  .desc {
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-bottom: 12px;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+  }
+
+  .meta label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .meta input {
+    padding: 4px 6px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background: #222;
+    color: #f5f5f5;
+    font-size: 0.8rem;
+  }
+
+  .players {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+  }
+
+  .players label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .players input {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #222;
+    color: #f5f5f5;
+    font-size: 0.9rem;
+    width: 130px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 420px;
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+  }
+
+  th, td {
+    border: 1px solid #333;
+    padding: 6px 4px;
+    text-align: center;
+  }
+
+  th {
+    background: #1e1e1e;
+  }
+
+  tbody tr:nth-child(odd) {
+    background: #181818;
+  }
+
+  select, input[type="text"], input[type="number"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 4px 6px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background: #222;
+    color: #f5f5f5;
+    font-size: 0.8rem;
+  }
+
+  /* ▼ タイトル列・勝者列・得点欄 調整ここ */
+  td:nth-child(2), th:nth-child(2) { width: 95px; }
+  td:nth-child(5), th:nth-child(5) { width: 90px; }
+
+  .scoreP1, .scoreP2 { width: 60px; }
+  /* ▲ 調整ここ */
+
+  .summary {
+    background: #181818;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .summary strong { color: #4fd1ff; }
+
+  .summary-buttons {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background: #222;
+    color: #f5f5f5;
+    font-size: 0.8rem;
+  }
+
+  .stats {
+    background: #181818;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .stats-title {
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #4fd1ff;
+  }
+
+  .history {
+    background: #181818;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .history-title {
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #4fd1ff;
+  }
+
+  .history-item {
+    border-top: 1px solid #333;
+    padding: 6px 0;
+  }
+
+  .history-item:first-child { border-top: none; }
+
+  .history-meta {
+    color: #ccc;
+    font-size: 0.75rem;
+  }
+</style>
 </head>
+
 <body>
-  <h1>兄弟スポーツリーグ 記録表（FC26 × プロスピ）</h1>
-  <p class="desc">
-    1シリーズ5試合・勝利3ポイント（第5試合のみ6ポイント）。<br>
-    シリーズ終了時のポイント差 × 200円 ＋ ボーナスを精算。
-  </p>
 
-  <div class="meta">
-    <label>シリーズ名：
-      <input id="seriesName" type="text" placeholder="例：2025年11月兄弟リーグ 第1節">
-    </label>
-    <label>日付：
-      <input id="seriesDate" type="date">
-    </label>
-  </div>
+<h1>兄弟スポーツリーグ 記録表（FC26 × プロスピ）</h1>
+<p class="desc">1シリーズ5試合・勝利3ポイント（第5試合のみ6P）  
+シリーズ終了時のポイント差 × 200円 ＋ ボーナスを精算。</p>
 
-  <div class="players">
-    <label>プレイヤー1：
-      <input id="p1Name" type="text" placeholder="兄など">
-    </label>
-    <label>プレイヤー2：
-      <input id="p2Name" type="text" placeholder="弟など">
-    </label>
-  </div>
+<div class="meta">
+  <label>シリーズ名：<input id="seriesName" type="text" placeholder="例：2025年11月兄弟リーグ 第1節"></label>
+  <label>日付：<input id="seriesDate" type="date"></label>
+</div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>試合</th>
-        <th>タイトル</th>
-        <th>P1得点</th>
-        <th>P2得点</th>
-        <th>勝者</th>
-        <th>メモ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- 5試合分 -->
-      <tr>
-        <td>1</td>
-        <td>
-          <select class="gameTitle">
-            <option value=""></option>
-            <option value="FC26">FC26</option>
-            <option value="プロスピ">プロスピ</option>
-          </select>
-        </td>
-        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-        <td>
-          <select class="winner">
-            <option value=""></option>
-            <option value="p1">プレイヤー1</option>
-            <option value="p2">プレイヤー2</option>
-          </select>
-        </td>
-        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>
-          <select class="gameTitle">
-            <option value=""></option>
-            <option value="FC26">FC26</option>
-            <option value="プロスピ">プロスピ</option>
-          </select>
-        </td>
-        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-        <td>
-          <select class="winner">
-            <option value=""></option>
-            <option value="p1">プレイヤー1</option>
-            <option value="p2">プレイヤー2</option>
-          </select>
-        </td>
-        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>
-          <select class="gameTitle">
-            <option value=""></option>
-            <option value="FC26">FC26</option>
-            <option value="プロスピ">プロスピ</option>
-          </select>
-        </td>
-        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-        <td>
-          <select class="winner">
-            <option value=""></option>
-            <option value="p1">プレイヤー1</option>
-            <option value="p2">プレイヤー2</option>
-          </select>
-        </td>
-        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>
-          <select class="gameTitle">
-            <option value=""></option>
-            <option value="FC26">FC26</option>
-            <option value="プロスピ">プロスピ</option>
-          </select>
-        </td>
-        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-        <td>
-          <select class="winner">
-            <option value=""></option>
-            <option value="p1">プレイヤー1</option>
-            <option value="p2">プレイヤー2</option>
-          </select>
-        </td>
-        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td>
-          <select class="gameTitle">
-            <option value=""></option>
-            <option value="FC26">FC26</option>
-            <option value="プロスピ">プロスピ</option>
-          </select>
-        </td>
-        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-        <td>
-          <select class="winner">
-            <option value=""></option>
-            <option value="p1">プレイヤー1</option>
-            <option value="p2">プレイヤー2</option>
-          </select>
-        </td>
-        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-      </tr>
-    </tbody>
-  </table>
+<div class="players">
+  <label>プレイヤー1：<input id="p1Name" type="text" placeholder="兄など"></label>
+  <label>プレイヤー2：<input id="p2Name" type="text" placeholder="弟など"></label>
+</div>
 
-  <div class="summary">
-    <div>
-      <span id="p1Label"><strong>プレイヤー1</strong></span>：<span id="p1Points">0</span> P<br>
-      <span id="p2Label"><strong>プレイヤー2</strong></span>：<span id="p2Points">0</span> P
-    </div>
-    <div style="margin-top:6px;">
-      ポイント差：<strong><span id="pointDiff">0</span> P</strong><br>
-      基本金額（差 × 200円）：<strong><span id="baseAmount">0</span> 円</strong><br>
-      ボーナス金額（全勝＋完封）：<strong><span id="bonusAmount">0</span> 円</strong><br>
-      合計精算額：<strong><span id="totalAmount">0</span> 円</strong><br>
-      支払う人：<strong><span id="payer">なし（同点）</span></strong>
-    </div>
-    <div class="summary-buttons">
-      <button type="button" id="saveHistoryBtn" class="btn">このシリーズを履歴に追加</button>
-      <button type="button" id="resetBtn" class="btn">このシリーズをリセット</button>
-    </div>
-  </div>
+<table>
+  <thead>
+    <tr>
+      <th>試合</th><th>タイトル</th><th>P1得点</th><th>P2得点</th><th>勝者</th><th>メモ</th>
+    </tr>
+  </thead>
 
-  <div class="stats">
-    <div class="stats-title">タイトル別 勝敗内訳（このシリーズ）</div>
-    <div id="statsFc26">FC26：P1 0勝 / P2 0勝</div>
-    <div id="statsProspi">プロスピ：P1 0勝 / P2 0勝</div>
-  </div>
-
-  <div class="history">
-    <div class="history-title">過去のシリーズ履歴（この端末）</div>
-    <div id="historyList" class="history-list">履歴はまだありません。</div>
-    <button type="button" id="clearHistoryBtn" class="btn" style="margin-top:8px;">
-      履歴をすべて削除
-    </button>
-  </div>
-
-  <script>
-    const STATE_KEY = "brothersLeague_state_v3";
-    const HISTORY_KEY = "brothersLeague_history_v1";
-
-    let currentCalc = {
-      p1: 0,
-      p2: 0,
-      diff: 0,
-      base: 0,
-      bonus: 0,
-      total: 0,
-      payer: "なし（同点）"
-    };
-
-    function saveState() {
-      const p1Name = document.getElementById("p1Name").value || "";
-      const p2Name = document.getElementById("p2Name").value || "";
-      const seriesName = document.getElementById("seriesName").value || "";
-      const seriesDate = document.getElementById("seriesDate").value || "";
-
-      const rows = [];
-      document.querySelectorAll("tbody tr").forEach((row) => {
-        rows.push({
-          gameTitle: row.querySelector(".gameTitle").value || "",
-          scoreP1: row.querySelector(".scoreP1").value || "",
-          scoreP2: row.querySelector(".scoreP2").value || "",
-          winner: row.querySelector(".winner").value || "",
-          note: row.querySelector(".note").value || "",
-        });
-      });
-
-      const state = { p1Name, p2Name, seriesName, seriesDate, rows };
-      try {
-        localStorage.setItem(STATE_KEY, JSON.stringify(state));
-      } catch (e) {}
-    }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STATE_KEY);
-        if (!raw) return;
-        const state = JSON.parse(raw);
-
-        if (state.p1Name !== undefined)
-          document.getElementById("p1Name").value = state.p1Name;
-        if (state.p2Name !== undefined)
-          document.getElementById("p2Name").value = state.p2Name;
-        if (state.seriesName !== undefined)
-          document.getElementById("seriesName").value = state.seriesName;
-        if (state.seriesDate !== undefined)
-          document.getElementById("seriesDate").value = state.seriesDate;
-
-        const rows = document.querySelectorAll("tbody tr");
-        (state.rows || []).forEach((r, i) => {
-          if (!rows[i]) return;
-          rows[i].querySelector(".gameTitle").value = r.gameTitle || "";
-          rows[i].querySelector(".scoreP1").value = r.scoreP1 || "";
-          rows[i].querySelector(".scoreP2").value = r.scoreP2 || "";
-          rows[i].querySelector(".winner").value = r.winner || "";
-          rows[i].querySelector(".note").value = r.note || "";
-        });
-      } catch (e) {}
-    }
-
-    function loadHistory() {
-      try {
-        const raw = localStorage.getItem(HISTORY_KEY);
-        if (!raw) return [];
-        return JSON.parse(raw) || [];
-      } catch (e) {
-        return [];
+  <tbody>
+    <!-- 5試合生成 -->
+    <script>
+      for (let i = 1; i <= 5; i++) {
+        document.write(`
+        <tr>
+          <td>${i}</td>
+          <td>
+            <select class="gameTitle">
+              <option value=""></option>
+              <option value="FC26">FC26</option>
+              <option value="プロスピ">プロスピ</option>
+            </select>
+          </td>
+          <td><input class="scoreP1" type="number" min="0"></td>
+          <td><input class="scoreP2" type="number" min="0"></td>
+          <td>
+            <select class="winner">
+              <option value=""></option>
+              <option value="p1">プレイヤー1</option>
+              <option value="p2">プレイヤー2</option>
+            </select>
+          </td>
+          <td><input class="note" type="text" placeholder="神試合など"></td>
+        </tr>
+        `);
       }
+    </script>
+  </tbody>
+</table>
+
+<div class="summary">
+  <div>
+    <span id="p1Label"><strong>プレイヤー1</strong></span>：<span id="p1Points">0</span>P<br>
+    <span id="p2Label"><strong>プレイヤー2</strong></span>：<span id="p2Points">0</span>P
+  </div>
+  <br>
+  ポイント差：<strong><span id="pointDiff">0</span>P</strong><br>
+  基本金額（差 × 200円）：<strong><span id="baseAmount">0</span>円</strong><br>
+  ボーナス金額（全勝＋完封）：<strong><span id="bonusAmount">0</span>円</strong><br>
+  合計精算額：<strong><span id="totalAmount">0</span>円</strong><br>
+  支払う人：<strong><span id="payer">なし（同点）</span></strong>
+
+  <div class="summary-buttons">
+    <button class="btn" id="saveHistoryBtn">このシリーズを履歴に追加</button>
+    <button class="btn" id="resetBtn">このシリーズをリセット</button>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stats-title">タイトル別 勝敗内訳（このシリーズ）</div>
+  <div id="statsFc26">FC26：P1 0勝 / P2 0勝</div>
+  <div id="statsProspi">プロスピ：P1 0勝 / P2 0勝</div>
+</div>
+
+<div class="history">
+  <div class="history-title">過去のシリーズ履歴（この端末）</div>
+  <div id="historyList">履歴はまだありません。</div>
+  <button class="btn" id="clearHistoryBtn" style="margin-top:8px;">履歴をすべて削除</button>
+</div>
+
+<script>
+  /* 省略せず全部のJSコードをここに入れてる（長いので折りたたみません） */
+  /* ↓↓↓ 今までの全機能＋履歴保存付き（最新版） ↓↓↓ */
+
+  const STATE_KEY = "brothersLeague_state_v3";
+  const HISTORY_KEY = "brothersLeague_history_v1";
+
+  let currentCalc = {
+    p1: 0,
+    p2: 0,
+    diff: 0,
+    base: 0,
+    bonus: 0,
+    total: 0,
+    payer: "なし（同点）"
+  };
+
+  function saveState() {
+    const p1Name = p1NameEl.value;
+    const p2Name = p2NameEl.value;
+    const seriesName = seriesNameEl.value;
+    const seriesDate = seriesDateEl.value;
+
+    const rows = [];
+    document.querySelectorAll("tbody tr").forEach((row) => {
+      rows.push({
+        gameTitle: row.querySelector(".gameTitle").value,
+        scoreP1: row.querySelector(".scoreP1").value,
+        scoreP2: row.querySelector(".scoreP2").value,
+        winner: row.querySelector(".winner").value,
+        note: row.querySelector(".note").value
+      });
+    });
+
+    localStorage.setItem(
+      STATE_KEY,
+      JSON.stringify({ p1Name, p2Name, seriesName, seriesDate, rows })
+    );
+  }
+
+  function loadState() {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (!raw) return;
+
+    const state = JSON.parse(raw);
+
+    p1NameEl.value = state.p1Name || "";
+    p2NameEl.value = state.p2Name || "";
+    seriesNameEl.value = state.seriesName || "";
+    seriesDateEl.value = state.seriesDate || "";
+
+    const trs = document.querySelectorAll("tbody tr");
+    state.rows?.forEach((r, i) => {
+      if (!trs[i]) return;
+      trs[i].querySelector(".gameTitle").value = r.gameTitle || "";
+      trs[i].querySelector(".scoreP1").value = r.scoreP1 || "";
+      trs[i].querySelector(".scoreP2").value = r.scoreP2 || "";
+      trs[i].querySelector(".winner").value = r.winner || "";
+      trs[i].querySelector(".note").value = r.note || "";
+    });
+  }
+
+  function loadHistory() {
+    try {
+      return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+    } catch { return []; }
+  }
+
+  function saveHistory(h) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
+  }
+
+  function renderHistory() {
+    const list = document.getElementById("historyList");
+    const history = loadHistory();
+
+    if (history.length === 0) {
+      list.textContent = "履歴はまだありません。";
+      return;
     }
 
-    function saveHistory(history) {
-      try {
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-      } catch (e) {}
-    }
+    let html = "";
+    history.slice().reverse().forEach((h) => {
+      html += `
+      <div class="history-item">
+        <div><strong>${h.seriesName || "シリーズ"}</strong></div>
+        <div class="history-meta">${h.seriesDate || ""} / ${h.p1Name} ${h.p1Points}P - ${h.p2Points}P ${h.p2Name}</div>
+        <div>精算：${h.total.toLocaleString()}円（${h.payerText}）</div>
+      </div>`;
+    });
 
-    function renderHistory() {
-      const listEl = document.getElementById("historyList");
-      const history = loadHistory();
+    list.innerHTML = html;
+  }
 
-      if (!history.length) {
-        listEl.textContent = "履歴はまだありません。";
-        return;
+  function updateStats() {
+    let fc26_p1 = 0, fc26_p2 = 0;
+    let pro_p1 = 0, pro_p2 = 0;
+
+    document.querySelectorAll("tbody tr").forEach(row => {
+      const t = row.querySelector(".gameTitle").value;
+      const w = row.querySelector(".winner").value;
+
+      if (!t || !w) return;
+
+      if (t === "FC26") {
+        if (w === "p1") fc26_p1++;
+        if (w === "p2") fc26_p2++;
       }
-
-      let html = "";
-      history
-        .slice()
-        .reverse()
-        .forEach((h, idx) => {
-          const label = h.seriesName || `シリーズ ${history.length - idx}`;
-          const dateStr = h.seriesDate || h.savedAt?.slice(0, 10) || "";
-          html += `
-            <div class="history-item">
-              <div><strong>${label}</strong></div>
-              <div class="history-meta">${dateStr ? dateStr + " / " : ""}${h.p1Name} ${h.p1Points}P - ${h.p2Points}P ${h.p2Name}</div>
-              <div>精算：${h.total.toLocaleString()} 円（${h.payerText}）</div>
-            </div>
-          `;
-        });
-
-      listEl.innerHTML = html;
-    }
-
-    function clearState() {
-      try {
-        localStorage.removeItem(STATE_KEY);
-      } catch (e) {}
-
-      document.getElementById("p1Name").value = "";
-      document.getElementById("p2Name").value = "";
-      document.getElementById("seriesName").value = "";
-      document.getElementById("seriesDate").value = "";
-
-      document.querySelectorAll("tbody tr").forEach((row) => {
-        row.querySelector(".gameTitle").value = "";
-        row.querySelector(".scoreP1").value = "";
-        row.querySelector(".scoreP2").value = "";
-        row.querySelector(".winner").value = "";
-        row.querySelector(".note").value = "";
-      });
-
-      recalc();
-    }
-
-    function updateStats() {
-      let fc26_p1 = 0, fc26_p2 = 0;
-      let pro_p1 = 0, pro_p2 = 0;
-
-      document.querySelectorAll("tbody tr").forEach((row) => {
-        const title = row.querySelector(".gameTitle").value;
-        const winner = row.querySelector(".winner").value;
-        if (!title || !winner) return;
-
-        if (title === "FC26") {
-          if (winner === "p1") fc26_p1++;
-          if (winner === "p2") fc26_p2++;
-        } else if (title === "プロスピ") {
-          if (winner === "p1") pro_p1++;
-          if (winner === "p2") pro_p2++;
-        }
-      });
-
-      document.getElementById("statsFc26").textContent =
-        `FC26：P1 ${fc26_p1}勝 / P2 ${fc26_p2}勝`;
-      document.getElementById("statsProspi").textContent =
-        `プロスピ：P1 ${pro_p1}勝 / P2 ${pro_p2}勝`;
-    }
-
-    function recalc() {
-      const p1Name = document.getElementById("p1Name").value || "プレイヤー1";
-      const p2Name = document.getElementById("p2Name").value || "プレイヤー2";
-      document.getElementById("p1Label").innerHTML = "<strong>" + p1Name + "</strong>";
-      document.getElementById("p2Label").innerHTML = "<strong>" + p2Name + "</strong>";
-
-      let p1 = 0, p2 = 0;
-      let p1Wins = 0, p2Wins = 0;
-      let cleanBonus = 0;
-
-      document.querySelectorAll("tbody tr").forEach((row, idx) => {
-        const w = row.querySelector(".winner").value;
-        const s1 = parseInt(row.querySelector(".scoreP1").value);
-        const s2 = parseInt(row.querySelector(".scoreP2").value);
-
-        if (w === "p1") {
-          p1 += (idx === 4) ? 6 : 3; // 第5試合は2倍
-          p1Wins++;
-          if (!isNaN(s2) && s2 === 0) cleanBonus += 100;
-        } else if (w === "p2") {
-          p2 += (idx === 4) ? 6 : 3;
-          p2Wins++;
-          if (!isNaN(s1) && s1 === 0) cleanBonus += 100;
-        }
-      });
-
-      const diff = Math.abs(p1 - p2);
-      const base = diff * 200;
-      const sweep = (p1Wins === 5 || p2Wins === 5) ? 500 : 0;
-      const bonus = sweep + cleanBonus;
-      const total = base + bonus;
-
-      let payerText = "なし（同点）";
-      if (p1 > p2) payerText = `${p2Name} → ${p1Name}`;
-      if (p2 > p1) payerText = `${p1Name} → ${p2Name}`;
-
-      currentCalc = {
-        p1, p2, diff, base, bonus, total,
-        payer: payerText
-      };
-
-      document.getElementById("p1Points").textContent = p1;
-      document.getElementById("p2Points").textContent = p2;
-      document.getElementById("pointDiff").textContent = diff;
-      document.getElementById("baseAmount").textContent = base.toLocaleString();
-      document.getElementById("bonusAmount").textContent = bonus.toLocaleString();
-      document.getElementById("totalAmount").textContent = total.toLocaleString();
-      document.getElementById("payer").textContent = payerText;
-
-      updateStats();
-      saveState();
-    }
-
-    function addCurrentSeriesToHistory() {
-      // 1試合も勝者が選ばれていない場合は弾く
-      const anyWinner = Array.from(document.querySelectorAll(".winner"))
-        .some(sel => sel.value === "p1" || sel.value === "p2");
-      if (!anyWinner) {
-        alert("最低1試合は勝者を選んでから履歴に追加してください。");
-        return;
-      }
-
-      const p1Name = document.getElementById("p1Name").value || "プレイヤー1";
-      const p2Name = document.getElementById("p2Name").value || "プレイヤー2";
-      const seriesName = document.getElementById("seriesName").value || "";
-      const seriesDate = document.getElementById("seriesDate").value || "";
-
-      const history = loadHistory();
-      history.push({
-        p1Name,
-        p2Name,
-        seriesName,
-        seriesDate,
-        p1Points: currentCalc.p1,
-        p2Points: currentCalc.p2,
-        diff: currentCalc.diff,
-        base: currentCalc.base,
-        bonus: currentCalc.bonus,
-        total: currentCalc.total,
-        payerText: currentCalc.payer,
-        savedAt: new Date().toISOString()
-      });
-      saveHistory(history);
-      renderHistory();
-      alert("このシリーズを履歴に追加しました。");
-    }
-
-    function clearHistory() {
-      if (!confirm("履歴をすべて削除しますか？")) return;
-      try {
-        localStorage.removeItem(HISTORY_KEY);
-      } catch (e) {}
-      renderHistory();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      loadState();
-      recalc();
-      renderHistory();
-
-      document.querySelectorAll("input, select").forEach((el) => {
-        el.addEventListener("input", recalc);
-        el.addEventListener("change", recalc);
-      });
-
-      const resetBtn = document.getElementById("resetBtn");
-      if (resetBtn) {
-        resetBtn.addEventListener("click", () => {
-          if (confirm("このシリーズの記録をすべてリセットしますか？")) {
-            clearState();
-          }
-        });
-      }
-
-      const saveHistoryBtn = document.getElementById("saveHistoryBtn");
-      if (saveHistoryBtn) {
-        saveHistoryBtn.addEventListener("click", addCurrentSeriesToHistory);
-      }
-
-      const clearHistoryBtn = document.getElementById("clearHistoryBtn");
-      if (clearHistoryBtn) {
-        clearHistoryBtn.addEventListener("click", clearHistory);
+      if (t === "プロスピ") {
+        if (w === "p1") pro_p1++;
+        if (w === "p2") pro_p2++;
       }
     });
-  </script>
+
+    document.getElementById("statsFc26").textContent =
+      `FC26：P1 ${fc26_p1}勝 / P2 ${fc26_p2}勝`;
+
+    document.getElementById("statsProspi").textContent =
+      `プロスピ：P1 ${pro_p1}勝 / P2 ${pro_p2}勝`;
+  }
+
+  function recalc() {
+    const p1Name = p1NameEl.value || "プレイヤー1";
+    const p2Name = p2NameEl.value || "プレイヤー2";
+
+    p1Label.textContent = p1Name;
+    p2Label.textContent = p2Name;
+
+    let p1 = 0, p2 = 0;
+    let w1 = 0, w2 = 0;
+    let clean = 0;
+
+    document.querySelectorAll("tbody tr").forEach((row, idx) => {
+      const w = row.querySelector(".winner").value;
+      const s1 = Number(row.querySelector(".scoreP1").value);
+      const s2 = Number(row.querySelector(".scoreP2").value);
+
+      if (w === "p1") {
+        p1 += (idx === 4 ? 6 : 3);
+        w1++;
+        if (s2 === 0) clean += 100;
+      }
+      if (w === "p2") {
+        p2 += (idx === 4 ? 6 : 3);
+        w2++;
+        if (s1 === 0) clean += 100;
+      }
+    });
+
+    const diff = Math.abs(p1 - p2);
+    const base = diff * 200;
+    const sweep = (w1 === 5 || w2 === 5) ? 500 : 0;
+    const bonus = sweep + clean;
+    const total = base + bonus;
+
+    let payer = "なし（同点）";
+    if (p1 > p2) payer = `${p2Name} → ${p1Name}`;
+    if (p2 > p1) payer = `${p1Name} → ${p2Name}`;
+
+    p1Points.textContent = p1;
+    p2Points.textContent = p2;
+    pointDiff.textContent = diff;
+    baseAmount.textContent = base.toLocaleString();
+    bonusAmount.textContent = bonus.toLocaleString();
+    totalAmount.textContent = total.toLocaleString();
+    payerEl.textContent = payer;
+
+    currentCalc = { p1, p2, diff, base, bonus, total, payer };
+
+    updateStats();
+    saveState();
+  }
+
+  function addHistory() {
+    const anyWinner = [...document.querySelectorAll(".winner")].some(w => w.value);
+    if (!anyWinner) {
+      alert("最低1試合は勝者を入力してね！");
+      return;
+    }
+
+    const h = loadHistory();
+    h.push({
+      p1Name: p1NameEl.value,
+      p2Name: p2NameEl.value,
+      seriesName: seriesNameEl.value,
+      seriesDate: seriesDateEl.value,
+      p1Points: currentCalc.p1,
+      p2Points: currentCalc.p2,
+      total: currentCalc.total,
+      payerText: currentCalc.payer,
+      savedAt: new Date().toISOString()
+    });
+
+    saveHistory(h);
+    renderHistory();
+    alert("履歴に保存しました！");
+  }
+
+  function clearHistory() {
+    if (!confirm("履歴をすべて削除しますか？")) return;
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+  }
+
+  /* DOM取得 */
+  const p1NameEl = document.getElementById("p1Name");
+  const p2NameEl = document.getElementById("p2Name");
+  const seriesNameEl = document.getElementById("seriesName");
+  const seriesDateEl = document.getElementById("seriesDate");
+
+  const p1Label = document.getElementById("p1Label");
+  const p2Label = document.getElementById("p2Label");
+  const p1Points = document.getElementById("p1Points");
+  const p2Points = document.getElementById("p2Points");
+  const pointDiff = document.getElementById("pointDiff");
+  const baseAmount = document.getElementById("baseAmount");
+  const bonusAmount = document.getElementById("bonusAmount");
+  const totalAmount = document.getElementById("totalAmount");
+  const payerEl = document.getElementById("payer");
+
+  /* イベント設定 */
+  document.addEventListener("input", recalc);
+  document.addEventListener("change", recalc);
+
+  document.getElementById("resetBtn").onclick = () => {
+    if (!confirm("このシリーズを全部リセットする？")) return;
+    localStorage.removeItem(STATE_KEY);
+    location.reload();
+  };
+
+  document.getElementById("saveHistoryBtn").onclick = addHistory;
+  document.getElementById("clearHistoryBtn").onclick = clearHistory;
+
+  /* 初期化 */
+  loadState();
+  recalc();
+  renderHistory();
+</script>
+
 </body>
 </html>
