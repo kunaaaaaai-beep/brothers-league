@@ -4,6 +4,20 @@
   <meta charset="UTF-8">
   <title>兄弟スポーツリーグ 記録表</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+    /* タイトル列を広くする */
+td:nth-child(2), th:nth-child(2) {
+  width: 95px;
+
+/* 勝者列（5列目）も広くする */
+td:nth-child(5), th:nth-child(5) {
+  width: 90px;
+}
+
+/* 得点欄は少しスリム化して全体バランス調整 */
+.scoreP1, .scoreP2 {
+  width: 60px;
+}
+    
   <style>
   td:nth-child(2), th:nth-child(2) {
   width: 90px; /* ← タイトル列を広めに */
