@@ -101,8 +101,13 @@
     .summary strong {
       color: #4fd1ff;
     }
-    .reset-btn {
+    .summary-buttons {
       margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn {
       padding: 6px 10px;
       border-radius: 6px;
       border: 1px solid #555;
@@ -116,11 +121,39 @@
       border-radius: 8px;
       font-size: 0.8rem;
       line-height: 1.6;
+      margin-bottom: 10px;
     }
     .stats-title {
       font-weight: bold;
       margin-bottom: 4px;
       color: #4fd1ff;
+    }
+    .history {
+      background: #181818;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .history-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: #4fd1ff;
+    }
+    .history-list {
+      margin-top: 4px;
+    }
+    .history-item {
+      border-top: 1px solid #333;
+      padding: 6px 0;
+    }
+    .history-item:first-child {
+      border-top: none;
+    }
+    .history-meta {
+      color: #ccc;
+      font-size: 0.75rem;
     }
   </style>
 </head>
@@ -277,7 +310,10 @@
       合計精算額：<strong><span id="totalAmount">0</span> 円</strong><br>
       支払う人：<strong><span id="payer">なし（同点）</span></strong>
     </div>
-    <button type="button" id="resetBtn" class="reset-btn">このシリーズをリセット</button>
+    <div class="summary-buttons">
+      <button type="button" id="saveHistoryBtn" class="btn">このシリーズを履歴に追加</button>
+      <button type="button" id="resetBtn" class="btn">このシリーズをリセット</button>
+    </div>
   </div>
 
   <div class="stats">
@@ -286,8 +322,27 @@
     <div id="statsProspi">プロスピ：P1 0勝 / P2 0勝</div>
   </div>
 
+  <div class="history">
+    <div class="history-title">過去のシリーズ履歴（この端末）</div>
+    <div id="historyList" class="history-list">履歴はまだありません。</div>
+    <button type="button" id="clearHistoryBtn" class="btn" style="margin-top:8px;">
+      履歴をすべて削除
+    </button>
+  </div>
+
   <script>
-    const STORAGE_KEY = "brothersLeague_v2";
+    const STATE_KEY = "brothersLeague_state_v3";
+    const HISTORY_KEY = "brothersLeague_history_v1";
+
+    let currentCalc = {
+      p1: 0,
+      p2: 0,
+      diff: 0,
+      base: 0,
+      bonus: 0,
+      total: 0,
+      payer: "なし（同点）"
+    };
 
     function saveState() {
       const p1Name = document.getElementById("p1Name").value || "";
@@ -308,15 +363,13 @@
 
       const state = { p1Name, p2Name, seriesName, seriesDate, rows };
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (e) {
-        // 保存失敗は無視
-      }
+        localStorage.setItem(STATE_KEY, JSON.stringify(state));
+      } catch (e) {}
     }
 
     function loadState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STATE_KEY);
         if (!raw) return;
         const state = JSON.parse(raw);
 
@@ -338,14 +391,56 @@
           rows[i].querySelector(".winner").value = r.winner || "";
           rows[i].querySelector(".note").value = r.note || "";
         });
+      } catch (e) {}
+    }
+
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        if (!raw) return [];
+        return JSON.parse(raw) || [];
       } catch (e) {
-        // 読み込み失敗も無視
+        return [];
       }
+    }
+
+    function saveHistory(history) {
+      try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      } catch (e) {}
+    }
+
+    function renderHistory() {
+      const listEl = document.getElementById("historyList");
+      const history = loadHistory();
+
+      if (!history.length) {
+        listEl.textContent = "履歴はまだありません。";
+        return;
+      }
+
+      let html = "";
+      history
+        .slice()
+        .reverse()
+        .forEach((h, idx) => {
+          const label = h.seriesName || `シリーズ ${history.length - idx}`;
+          const dateStr = h.seriesDate || h.savedAt?.slice(0, 10) || "";
+          html += `
+            <div class="history-item">
+              <div><strong>${label}</strong></div>
+              <div class="history-meta">${dateStr ? dateStr + " / " : ""}${h.p1Name} ${h.p1Points}P - ${h.p2Points}P ${h.p2Name}</div>
+              <div>精算：${h.total.toLocaleString()} 円（${h.payerText}）</div>
+            </div>
+          `;
+        });
+
+      listEl.innerHTML = html;
     }
 
     function clearState() {
       try {
-        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(STATE_KEY);
       } catch (e) {}
 
       document.getElementById("p1Name").value = "";
@@ -414,34 +509,79 @@
         }
       });
 
-      document.getElementById("p1Points").textContent = p1;
-      document.getElementById("p2Points").textContent = p2;
-
       const diff = Math.abs(p1 - p2);
-      document.getElementById("pointDiff").textContent = diff;
-
       const base = diff * 200;
-      document.getElementById("baseAmount").textContent = base.toLocaleString();
-
       const sweep = (p1Wins === 5 || p2Wins === 5) ? 500 : 0;
       const bonus = sweep + cleanBonus;
-      document.getElementById("bonusAmount").textContent = bonus.toLocaleString();
-
       const total = base + bonus;
-      document.getElementById("totalAmount").textContent = total.toLocaleString();
 
-      let payer = "なし（同点）";
-      if (p1 > p2) payer = p2Name + " → " + p1Name;
-      if (p2 > p1) payer = p1Name + " → " + p2Name;
-      document.getElementById("payer").textContent = payer;
+      let payerText = "なし（同点）";
+      if (p1 > p2) payerText = `${p2Name} → ${p1Name}`;
+      if (p2 > p1) payerText = `${p1Name} → ${p2Name}`;
+
+      currentCalc = {
+        p1, p2, diff, base, bonus, total,
+        payer: payerText
+      };
+
+      document.getElementById("p1Points").textContent = p1;
+      document.getElementById("p2Points").textContent = p2;
+      document.getElementById("pointDiff").textContent = diff;
+      document.getElementById("baseAmount").textContent = base.toLocaleString();
+      document.getElementById("bonusAmount").textContent = bonus.toLocaleString();
+      document.getElementById("totalAmount").textContent = total.toLocaleString();
+      document.getElementById("payer").textContent = payerText;
 
       updateStats();
       saveState();
     }
 
+    function addCurrentSeriesToHistory() {
+      // 1試合も勝者が選ばれていない場合は弾く
+      const anyWinner = Array.from(document.querySelectorAll(".winner"))
+        .some(sel => sel.value === "p1" || sel.value === "p2");
+      if (!anyWinner) {
+        alert("最低1試合は勝者を選んでから履歴に追加してください。");
+        return;
+      }
+
+      const p1Name = document.getElementById("p1Name").value || "プレイヤー1";
+      const p2Name = document.getElementById("p2Name").value || "プレイヤー2";
+      const seriesName = document.getElementById("seriesName").value || "";
+      const seriesDate = document.getElementById("seriesDate").value || "";
+
+      const history = loadHistory();
+      history.push({
+        p1Name,
+        p2Name,
+        seriesName,
+        seriesDate,
+        p1Points: currentCalc.p1,
+        p2Points: currentCalc.p2,
+        diff: currentCalc.diff,
+        base: currentCalc.base,
+        bonus: currentCalc.bonus,
+        total: currentCalc.total,
+        payerText: currentCalc.payer,
+        savedAt: new Date().toISOString()
+      });
+      saveHistory(history);
+      renderHistory();
+      alert("このシリーズを履歴に追加しました。");
+    }
+
+    function clearHistory() {
+      if (!confirm("履歴をすべて削除しますか？")) return;
+      try {
+        localStorage.removeItem(HISTORY_KEY);
+      } catch (e) {}
+      renderHistory();
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       loadState();
       recalc();
+      renderHistory();
 
       document.querySelectorAll("input, select").forEach((el) => {
         el.addEventListener("input", recalc);
@@ -455,6 +595,16 @@
             clearState();
           }
         });
+      }
+
+      const saveHistoryBtn = document.getElementById("saveHistoryBtn");
+      if (saveHistoryBtn) {
+        saveHistoryBtn.addEventListener("click", addCurrentSeriesToHistory);
+      }
+
+      const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+      if (clearHistoryBtn) {
+        clearHistoryBtn.addEventListener("click", clearHistory);
       }
     });
   </script>
