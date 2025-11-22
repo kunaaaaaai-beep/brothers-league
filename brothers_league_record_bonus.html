@@ -388,57 +388,63 @@
       `プロスピ：P1 ${pro_p1}勝 / P2 ${pro_p2}勝`;
   }
 
-  function recalc() {
-    const p1Name = p1NameEl.value || "プレイヤー1";
-    const p2Name = p2NameEl.value || "プレイヤー2";
+function recalc() {
+  const p1Name = p1NameEl.value || "プレイヤー1";
+  const p2Name = p2NameEl.value || "プレイヤー2";
 
-    p1Label.textContent = p1Name;
-    p2Label.textContent = p2Name;
+  p1Label.textContent = p1Name;
+  p2Label.textContent = p2Name;
 
-    let p1 = 0, p2 = 0;
-    let w1 = 0, w2 = 0;
-    let clean = 0;
+  let p1 = 0, p2 = 0;
+  let w1 = 0, w2 = 0;
+  // ★ プレイヤーごとの完封回数
+  let clean1 = 0, clean2 = 0;
 
-    document.querySelectorAll("tbody tr").forEach((row, idx) => {
-      const w = row.querySelector(".winner").value;
-      const s1 = Number(row.querySelector(".scoreP1").value);
-      const s2 = Number(row.querySelector(".scoreP2").value);
+  document.querySelectorAll("tbody tr").forEach((row, idx) => {
+    const w = row.querySelector(".winner").value;
+    const s1 = Number(row.querySelector(".scoreP1").value);
+    const s2 = Number(row.querySelector(".scoreP2").value);
 
-      if (w === "p1") {
-        p1 += (idx === 4 ? 6 : 3);
-        w1++;
-        if (s2 === 0) clean += 100;
-      }
-      if (w === "p2") {
-        p2 += (idx === 4 ? 6 : 3);
-        w2++;
-        if (s1 === 0) clean += 100;
-      }
-    });
+    if (w === "p1") {
+      p1 += (idx === 4 ? 6 : 3); // 第5試合は2倍
+      w1++;
+      if (!isNaN(s2) && s2 === 0) clean1++;  // ★ P1の完封
+    }
+    if (w === "p2") {
+      p2 += (idx === 4 ? 6 : 3);
+      w2++;
+      if (!isNaN(s1) && s1 === 0) clean2++;  // ★ P2の完封
+    }
+  });
 
-    const diff = Math.abs(p1 - p2);
-    const base = diff * 200;
-    const sweep = (w1 === 5 || w2 === 5) ? 500 : 0;
-    const bonus = sweep + clean;
-    const total = base + bonus;
+  const diff = Math.abs(p1 - p2);
+  const base = diff * 200;
 
-    let payer = "なし（同点）";
-    if (p1 > p2) payer = `${p2Name} → ${p1Name}`;
-    if (p2 > p1) payer = `${p1Name} → ${p2Name}`;
+  // ★ 完封ボーナスは「完封数の差 × 100円」
+  const cleanDiff = Math.abs(clean1 - clean2);
+  const cleanBonus = cleanDiff * 100;
 
-    p1Points.textContent = p1;
-    p2Points.textContent = p2;
-    pointDiff.textContent = diff;
-    baseAmount.textContent = base.toLocaleString();
-    bonusAmount.textContent = bonus.toLocaleString();
-    totalAmount.textContent = total.toLocaleString();
-    payerEl.textContent = payer;
+  const sweep = (w1 === 5 || w2 === 5) ? 500 : 0;
+  const bonus = sweep + cleanBonus;
+  const total = base + bonus;
 
-    currentCalc = { p1, p2, diff, base, bonus, total, payer };
+  let payer = "なし（同点）";
+  if (p1 > p2) payer = `${p2Name} → ${p1Name}`;
+  if (p2 > p1) payer = `${p1Name} → ${p2Name}`;
 
-    updateStats();
-    saveState();
-  }
+  p1Points.textContent = p1;
+  p2Points.textContent = p2;
+  pointDiff.textContent = diff;
+  baseAmount.textContent = base.toLocaleString();
+  bonusAmount.textContent = bonus.toLocaleString();
+  totalAmount.textContent = total.toLocaleString();
+  payerEl.textContent = payer;
+
+  currentCalc = { p1, p2, diff, base, bonus, total, payer };
+
+  updateStats();
+  saveState();
+}
 
   function addHistory() {
     const anyWinner = [...document.querySelectorAll(".winner")].some(w => w.value);
