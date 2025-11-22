@@ -19,16 +19,39 @@
     .desc {
       font-size: 0.85rem;
       color: #ccc;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+    }
+    .meta label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .meta input {
+      padding: 4px 6px;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background: #222;
+      color: #f5f5f5;
+      font-size: 0.8rem;
     }
     .players {
       display: flex;
       gap: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
+      font-size: 0.85rem;
     }
     .players label {
-      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
     .players input {
       padding: 6px 8px;
@@ -39,15 +62,12 @@
       font-size: 0.9rem;
       width: 130px;
     }
-    .table-wrapper {
-      overflow-x: auto;
-      margin-bottom: 16px;
-    }
     table {
       width: 100%;
       border-collapse: collapse;
       min-width: 420px;
       font-size: 0.8rem;
+      margin-bottom: 10px;
     }
     th, td {
       border: 1px solid #333;
@@ -76,20 +96,49 @@
       border-radius: 8px;
       font-size: 0.9rem;
       line-height: 1.6;
+      margin-bottom: 10px;
     }
     .summary strong {
       color: #4fd1ff;
     }
-    .note {
-      margin-top: 10px;
-      font-size: 0.75rem;
-      color: #bbb;
+    .reset-btn {
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #222;
+      color: #f5f5f5;
+      font-size: 0.8rem;
+    }
+    .stats {
+      background: #181818;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+    .stats-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: #4fd1ff;
     }
   </style>
 </head>
 <body>
   <h1>兄弟スポーツリーグ 記録表（FC26 × プロスピ）</h1>
-  <p class="desc">1シリーズ5試合・勝利3ポイント（最終戦のみ6ポイント）。シリーズ終了時のポイント差 × 200円 ＋ ボーナスをPayPayで精算。</p>
+  <p class="desc">
+    1シリーズ5試合・勝利3ポイント（第5試合のみ6ポイント）。<br>
+    シリーズ終了時のポイント差 × 200円 ＋ ボーナスを精算。
+  </p>
+
+  <div class="meta">
+    <label>シリーズ名：
+      <input id="seriesName" type="text" placeholder="例：2025年11月兄弟リーグ 第1節">
+    </label>
+    <label>日付：
+      <input id="seriesDate" type="date">
+    </label>
+  </div>
 
   <div class="players">
     <label>プレイヤー1：
@@ -100,128 +149,121 @@
     </label>
   </div>
 
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>試合</th>
-          <th>タイトル</th>
-          <th>P1得点</th>
-          <th>P2得点</th>
-          <th>勝者</th>
-          <th>メモ</th>
-        </tr>
-      </thead>
-      <tbody>
-
-    <tr>
-      <td>1</td>
-      <td>
-        <select class="gameTitle">
-          <option value="">-</option>
-          <option value="FC26">FC26</option>
-          <option value="プロスピ">プロスピ</option>
-        </select>
-      </td>
-      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-      <td>
-        <select class="winner">
-          <option value="">-</option>
-          <option value="p1">プレイヤー1</option>
-          <option value="p2">プレイヤー2</option>
-        </select>
-      </td>
-      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-    </tr>
-
-    <tr>
-      <td>2</td>
-      <td>
-        <select class="gameTitle">
-          <option value="">-</option>
-          <option value="FC26">FC26</option>
-          <option value="プロスピ">プロスピ</option>
-        </select>
-      </td>
-      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-      <td>
-        <select class="winner">
-          <option value="">-</option>
-          <option value="p1">プレイヤー1</option>
-          <option value="p2">プレイヤー2</option>
-        </select>
-      </td>
-      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-    </tr>
-
-    <tr>
-      <td>3</td>
-      <td>
-        <select class="gameTitle">
-          <option value="">-</option>
-          <option value="FC26">FC26</option>
-          <option value="プロスピ">プロスピ</option>
-        </select>
-      </td>
-      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-      <td>
-        <select class="winner">
-          <option value="">-</option>
-          <option value="p1">プレイヤー1</option>
-          <option value="p2">プレイヤー2</option>
-        </select>
-      </td>
-      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-    </tr>
-
-    <tr>
-      <td>4</td>
-      <td>
-        <select class="gameTitle">
-          <option value="">-</option>
-          <option value="FC26">FC26</option>
-          <option value="プロスピ">プロスピ</option>
-        </select>
-      </td>
-      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-      <td>
-        <select class="winner">
-          <option value="">-</option>
-          <option value="p1">プレイヤー1</option>
-          <option value="p2">プレイヤー2</option>
-        </select>
-      </td>
-      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-    </tr>
-
-    <tr>
-      <td>5</td>
-      <td>
-        <select class="gameTitle">
-          <option value="">-</option>
-          <option value="FC26">FC26</option>
-          <option value="プロスピ">プロスピ</option>
-        </select>
-      </td>
-      <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
-      <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
-      <td>
-        <select class="winner">
-          <option value="">-</option>
-          <option value="p1">プレイヤー1</option>
-          <option value="p2">プレイヤー2</option>
-        </select>
-      </td>
-      <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
-    </tr>
-
-      </tbody>
-    </table>
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>試合</th>
+        <th>タイトル</th>
+        <th>P1得点</th>
+        <th>P2得点</th>
+        <th>勝者</th>
+        <th>メモ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 5試合分 -->
+      <tr>
+        <td>1</td>
+        <td>
+          <select class="gameTitle">
+            <option value=""></option>
+            <option value="FC26">FC26</option>
+            <option value="プロスピ">プロスピ</option>
+          </select>
+        </td>
+        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+        <td>
+          <select class="winner">
+            <option value=""></option>
+            <option value="p1">プレイヤー1</option>
+            <option value="p2">プレイヤー2</option>
+          </select>
+        </td>
+        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>
+          <select class="gameTitle">
+            <option value=""></option>
+            <option value="FC26">FC26</option>
+            <option value="プロスピ">プロスピ</option>
+          </select>
+        </td>
+        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+        <td>
+          <select class="winner">
+            <option value=""></option>
+            <option value="p1">プレイヤー1</option>
+            <option value="p2">プレイヤー2</option>
+          </select>
+        </td>
+        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>
+          <select class="gameTitle">
+            <option value=""></option>
+            <option value="FC26">FC26</option>
+            <option value="プロスピ">プロスピ</option>
+          </select>
+        </td>
+        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+        <td>
+          <select class="winner">
+            <option value=""></option>
+            <option value="p1">プレイヤー1</option>
+            <option value="p2">プレイヤー2</option>
+          </select>
+        </td>
+        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>
+          <select class="gameTitle">
+            <option value=""></option>
+            <option value="FC26">FC26</option>
+            <option value="プロスピ">プロスピ</option>
+          </select>
+        </td>
+        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+        <td>
+          <select class="winner">
+            <option value=""></option>
+            <option value="p1">プレイヤー1</option>
+            <option value="p2">プレイヤー2</option>
+          </select>
+        </td>
+        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>
+          <select class="gameTitle">
+            <option value=""></option>
+            <option value="FC26">FC26</option>
+            <option value="プロスピ">プロスピ</option>
+          </select>
+        </td>
+        <td><input type="number" min="0" step="1" class="scoreP1" placeholder="0"></td>
+        <td><input type="number" min="0" step="1" class="scoreP2" placeholder="0"></td>
+        <td>
+          <select class="winner">
+            <option value=""></option>
+            <option value="p1">プレイヤー1</option>
+            <option value="p2">プレイヤー2</option>
+          </select>
+        </td>
+        <td><input type="text" class="note" placeholder="神試合 などメモ"></td>
+      </tr>
+    </tbody>
+  </table>
 
   <div class="summary">
     <div>
@@ -235,128 +277,186 @@
       合計精算額：<strong><span id="totalAmount">0</span> 円</strong><br>
       支払う人：<strong><span id="payer">なし（同点）</span></strong>
     </div>
-    <p class="note">
-      ボーナスのルール：<br>
-      ・どちらかが5戦全勝 → ＋500円<br>
-      ・各試合で勝者側が相手を0点に抑えたら → 1試合ごとに＋100円<br>
-      ・最終戦（第5試合）のみポイント2倍（6P）
-    </p>
+    <button type="button" id="resetBtn" class="reset-btn">このシリーズをリセット</button>
   </div>
+
+  <div class="stats">
+    <div class="stats-title">タイトル別 勝敗内訳（このシリーズ）</div>
+    <div id="statsFc26">FC26：P1 0勝 / P2 0勝</div>
+    <div id="statsProspi">プロスピ：P1 0勝 / P2 0勝</div>
+  </div>
+
   <script>
-  const STORAGE_KEY = "brothersLeagueState_v1";
+    const STORAGE_KEY = "brothersLeague_v2";
 
-  function saveState() {
-    const p1Name = document.getElementById("p1Name").value || "";
-    const p2Name = document.getElementById("p2Name").value || "";
+    function saveState() {
+      const p1Name = document.getElementById("p1Name").value || "";
+      const p2Name = document.getElementById("p2Name").value || "";
+      const seriesName = document.getElementById("seriesName").value || "";
+      const seriesDate = document.getElementById("seriesDate").value || "";
 
-    const rows = [];
-    document.querySelectorAll("tbody tr").forEach((row) => {
-      rows.push({
-        gameTitle: row.querySelector(".gameTitle").value || "",
-        scoreP1: row.querySelector(".scoreP1").value || "",
-        scoreP2: row.querySelector(".scoreP2").value || "",
-        winner: row.querySelector(".winner").value || "",
-        note: row.querySelector(".note").value || "",
+      const rows = [];
+      document.querySelectorAll("tbody tr").forEach((row) => {
+        rows.push({
+          gameTitle: row.querySelector(".gameTitle").value || "",
+          scoreP1: row.querySelector(".scoreP1").value || "",
+          scoreP2: row.querySelector(".scoreP2").value || "",
+          winner: row.querySelector(".winner").value || "",
+          note: row.querySelector(".note").value || "",
+        });
       });
-    });
 
-    const state = { p1Name, p2Name, rows };
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {
-      // 保存できない場合は何もしない
+      const state = { p1Name, p2Name, seriesName, seriesDate, rows };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        // 保存失敗は無視
+      }
     }
-  }
 
-  function loadState() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const state = JSON.parse(raw);
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const state = JSON.parse(raw);
 
-      if (state.p1Name !== undefined)
-        document.getElementById("p1Name").value = state.p1Name;
-      if (state.p2Name !== undefined)
-        document.getElementById("p2Name").value = state.p2Name;
+        if (state.p1Name !== undefined)
+          document.getElementById("p1Name").value = state.p1Name;
+        if (state.p2Name !== undefined)
+          document.getElementById("p2Name").value = state.p2Name;
+        if (state.seriesName !== undefined)
+          document.getElementById("seriesName").value = state.seriesName;
+        if (state.seriesDate !== undefined)
+          document.getElementById("seriesDate").value = state.seriesDate;
 
-      const rows = document.querySelectorAll("tbody tr");
-      (state.rows || []).forEach((r, i) => {
-        if (!rows[i]) return;
-        rows[i].querySelector(".gameTitle").value = r.gameTitle || "";
-        rows[i].querySelector(".scoreP1").value = r.scoreP1 || "";
-        rows[i].querySelector(".scoreP2").value = r.scoreP2 || "";
-        rows[i].querySelector(".winner").value = r.winner || "";
-        rows[i].querySelector(".note").value = r.note || "";
+        const rows = document.querySelectorAll("tbody tr");
+        (state.rows || []).forEach((r, i) => {
+          if (!rows[i]) return;
+          rows[i].querySelector(".gameTitle").value = r.gameTitle || "";
+          rows[i].querySelector(".scoreP1").value = r.scoreP1 || "";
+          rows[i].querySelector(".scoreP2").value = r.scoreP2 || "";
+          rows[i].querySelector(".winner").value = r.winner || "";
+          rows[i].querySelector(".note").value = r.note || "";
+        });
+      } catch (e) {
+        // 読み込み失敗も無視
+      }
+    }
+
+    function clearState() {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+
+      document.getElementById("p1Name").value = "";
+      document.getElementById("p2Name").value = "";
+      document.getElementById("seriesName").value = "";
+      document.getElementById("seriesDate").value = "";
+
+      document.querySelectorAll("tbody tr").forEach((row) => {
+        row.querySelector(".gameTitle").value = "";
+        row.querySelector(".scoreP1").value = "";
+        row.querySelector(".scoreP2").value = "";
+        row.querySelector(".winner").value = "";
+        row.querySelector(".note").value = "";
       });
-    } catch (e) {
-      // 読み込み失敗は無視
+
+      recalc();
     }
-  }
 
-  function recalc() {
-    const p1Name = document.getElementById("p1Name").value || "プレイヤー1";
-    const p2Name = document.getElementById("p2Name").value || "プレイヤー2";
-    document.getElementById("p1Label").innerHTML = "<strong>" + p1Name + "</strong>";
-    document.getElementById("p2Label").innerHTML = "<strong>" + p2Name + "</strong>";
+    function updateStats() {
+      let fc26_p1 = 0, fc26_p2 = 0;
+      let pro_p1 = 0, pro_p2 = 0;
 
-    let p1 = 0, p2 = 0;
-    let p1Wins = 0, p2Wins = 0;
-    let cleanBonus = 0;
+      document.querySelectorAll("tbody tr").forEach((row) => {
+        const title = row.querySelector(".gameTitle").value;
+        const winner = row.querySelector(".winner").value;
+        if (!title || !winner) return;
 
-    document.querySelectorAll("tbody tr").forEach((row, idx) => {
-      const w = row.querySelector(".winner").value;
-      const s1 = parseInt(row.querySelector(".scoreP1").value);
-      const s2 = parseInt(row.querySelector(".scoreP2").value);
+        if (title === "FC26") {
+          if (winner === "p1") fc26_p1++;
+          if (winner === "p2") fc26_p2++;
+        } else if (title === "プロスピ") {
+          if (winner === "p1") pro_p1++;
+          if (winner === "p2") pro_p2++;
+        }
+      });
 
-      if (w === "p1") {
-        p1 += (idx === 4) ? 6 : 3;  // 第5試合は2倍
-        p1Wins++;
-        if (s2 === 0) cleanBonus += 100;
-      }
-      if (w === "p2") {
-        p2 += (idx === 4) ? 6 : 3;
-        p2Wins++;
-        if (s1 === 0) cleanBonus += 100;
+      document.getElementById("statsFc26").textContent =
+        `FC26：P1 ${fc26_p1}勝 / P2 ${fc26_p2}勝`;
+      document.getElementById("statsProspi").textContent =
+        `プロスピ：P1 ${pro_p1}勝 / P2 ${pro_p2}勝`;
+    }
+
+    function recalc() {
+      const p1Name = document.getElementById("p1Name").value || "プレイヤー1";
+      const p2Name = document.getElementById("p2Name").value || "プレイヤー2";
+      document.getElementById("p1Label").innerHTML = "<strong>" + p1Name + "</strong>";
+      document.getElementById("p2Label").innerHTML = "<strong>" + p2Name + "</strong>";
+
+      let p1 = 0, p2 = 0;
+      let p1Wins = 0, p2Wins = 0;
+      let cleanBonus = 0;
+
+      document.querySelectorAll("tbody tr").forEach((row, idx) => {
+        const w = row.querySelector(".winner").value;
+        const s1 = parseInt(row.querySelector(".scoreP1").value);
+        const s2 = parseInt(row.querySelector(".scoreP2").value);
+
+        if (w === "p1") {
+          p1 += (idx === 4) ? 6 : 3; // 第5試合は2倍
+          p1Wins++;
+          if (!isNaN(s2) && s2 === 0) cleanBonus += 100;
+        } else if (w === "p2") {
+          p2 += (idx === 4) ? 6 : 3;
+          p2Wins++;
+          if (!isNaN(s1) && s1 === 0) cleanBonus += 100;
+        }
+      });
+
+      document.getElementById("p1Points").textContent = p1;
+      document.getElementById("p2Points").textContent = p2;
+
+      const diff = Math.abs(p1 - p2);
+      document.getElementById("pointDiff").textContent = diff;
+
+      const base = diff * 200;
+      document.getElementById("baseAmount").textContent = base.toLocaleString();
+
+      const sweep = (p1Wins === 5 || p2Wins === 5) ? 500 : 0;
+      const bonus = sweep + cleanBonus;
+      document.getElementById("bonusAmount").textContent = bonus.toLocaleString();
+
+      const total = base + bonus;
+      document.getElementById("totalAmount").textContent = total.toLocaleString();
+
+      let payer = "なし（同点）";
+      if (p1 > p2) payer = p2Name + " → " + p1Name;
+      if (p2 > p1) payer = p1Name + " → " + p2Name;
+      document.getElementById("payer").textContent = payer;
+
+      updateStats();
+      saveState();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadState();
+      recalc();
+
+      document.querySelectorAll("input, select").forEach((el) => {
+        el.addEventListener("input", recalc);
+        el.addEventListener("change", recalc);
+      });
+
+      const resetBtn = document.getElementById("resetBtn");
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (confirm("このシリーズの記録をすべてリセットしますか？")) {
+            clearState();
+          }
+        });
       }
     });
-
-    document.getElementById("p1Points").textContent = p1;
-    document.getElementById("p2Points").textContent = p2;
-
-    const diff = Math.abs(p1 - p2);
-    document.getElementById("pointDiff").textContent = diff;
-
-    const base = diff * 200;
-    document.getElementById("baseAmount").textContent = base.toLocaleString();
-
-    let sweep = (p1Wins === 5 || p2Wins === 5) ? 500 : 0;
-    const bonus = sweep + cleanBonus;
-    document.getElementById("bonusAmount").textContent = bonus.toLocaleString();
-
-    const total = base + bonus;
-    document.getElementById("totalAmount").textContent = total.toLocaleString();
-
-    let payer = "なし（同点）";
-    if (p1 > p2) payer = p2Name + " → " + p1Name;
-    if (p2 > p1) payer = p1Name + " → " + p2Name;
-    document.getElementById("payer").textContent = payer;
-
-    // 計算のたびに状態を保存
-    saveState();
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    // 入力イベントで再計算＋保存
-    document.querySelectorAll("input, select").forEach((el) => {
-      el.addEventListener("input", recalc);
-      el.addEventListener("change", recalc);
-    });
-
-    // まず保存された状態を復元
-    loadState();
-    // 復元結果で計算を反映
-    recalc();
-  });
-</script>
+  </script>
 </body>
 </html>
